@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Absensi Jurusan RPL Muhtiga</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    
+  </style>
+</head>
+<body>
+  <script>
+    location.replace(
+      "https://script.google.com/macros/s/AKfycbzU4h5vinaU-B6zLsx4ba3vfUup5BWmA6iLBWXsxilNUWxZkbhOM6z2hOXLZcYYPC08lQ/exec"
+    );
+ 
+document.addEventListener("backbutton", function () {
+  if (confirm("Keluar dari aplikasi Absensi RPL Muhtiga?")) {
+    navigator.app.exitApp();
+  }
+}, false);
+
+
+function checkConnection() {
+  if (!navigator.onLine) {
+    alert("Tidak ada koneksi internet.\nPeriksa jaringan Anda.");
+  }
+}
+
+window.addEventListener("offline", checkConnection);
+window.addEventListener("online", () => {
+  location.reload();
+});
+</script>
+
+</body>
+</html>
