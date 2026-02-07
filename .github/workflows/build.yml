@@ -1,10 +1,8 @@
-name: Build APK
+name: Build APK (Release)
 
 on:
   push:
     branches: [ main ]
-    paths-ignore:
-      - 'apk/**'
 
 permissions:
   contents: write
@@ -16,8 +14,6 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-        with:
-          persist-credentials: true
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -40,28 +36,15 @@ jobs:
           cd temp
           cordova build android --debug --packageType=apk
 
-      - name: Copy APK to repo
+      - name: Locate APK
         run: |
-          echo "=== SEARCH APK ==="
           find temp -type f -name "*.apk"
-
           APK_PATH=$(find temp -type f -name "*.apk" | head -n 1)
+          echo "APK_PATH=$APK_PATH" >> $GITHUB_ENV
 
-          if [ -z "$APK_PATH" ]; then
-            echo "APK NOT FOUND"
-            exit 1
-          fi
-
-          echo "APK FOUND: $APK_PATH"
-
-          mkdir -p apk
-          cp "$APK_PATH" apk/Absensi-RPL-Muhtiga.apk
-          ls -lah apk
-
-      - name: Commit APK to repository
-        run: |
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
-          git add apk/Absensi-RPL-Muhtiga.apk
-          git commit -m "Update APK Absensi RPL Muhtiga" || echo "No changes to commit"
-          git push
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: Absensi Jurusan RPL Muhtiga
+          files: ${{ env.APK_PATH }}
