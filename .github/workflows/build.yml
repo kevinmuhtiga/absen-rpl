@@ -9,31 +9,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-    - name: Setup Node
-      uses: actions/setup-node@v3
-      with:
-        node-version: 18
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
 
-    - name: Install Cordova
-      run: npm install -g cordova
+      - name: Install Cordova
+        run: npm install -g cordova
 
-    - name: Prepare Project
-      run: |
-        cordova create temp com.webview.apk WebViewAPK
-        cp -r www temp/
-        cp config.xml temp/
-        cd temp
-        cordova platform add android
+      - name: Prepare Project
+        run: |
+          cordova create temp com.kevinpermana.absensirpl "Absensi Jurusan RPL Muhtiga"
+          cp -r www temp/
+          cp config.xml temp/
+          cd temp
+          cordova platform add android
 
-    - name: Build APK
-      run: |
-        cd temp
-        cordova build android
+      - name: Build APK
+        run: |
+          cd temp
+          cordova build android
 
-  - name: Upload APK
-  uses: actions/upload-artifact@v4
-  with:
-    name: apk
-    path: temp/platforms/android/app/build/outputs/apk/debug/*.apk
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Absensi-RPL-Muhtiga-APK
+          path: temp/platforms/android/app/build/outputs/apk/debug/*.apk
