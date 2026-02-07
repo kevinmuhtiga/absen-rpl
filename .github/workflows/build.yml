@@ -3,6 +3,11 @@ name: Build APK
 on:
   push:
     branches: [ main ]
+    paths-ignore:
+      - 'apk/**'
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -41,3 +46,22 @@ jobs:
           find temp -type f -name "*.apk"
 
           APK_PATH=$(find temp -type f -name "*.apk" | head -n 1)
+
+          if [ -z "$APK_PATH" ]; then
+            echo "APK NOT FOUND"
+            exit 1
+          fi
+
+          echo "APK FOUND: $APK_PATH"
+
+          mkdir -p apk
+          cp "$APK_PATH" apk/Absensi-RPL-Muhtiga.apk
+          ls -lah apk
+
+      - name: Commit APK to repository
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add apk/Absensi-RPL-Muhtiga.apk
+          git commit -m "Update APK Absensi RPL Muhtiga" || echo "No changes to commit"
+          git push
