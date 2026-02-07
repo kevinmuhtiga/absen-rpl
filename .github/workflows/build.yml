@@ -33,13 +33,13 @@ jobs:
           cd temp
           cordova build android
 
-            - name: Find APK
+      - name: Find APK
         run: |
-          echo "=== LIST APK FILES ==="
+          echo "=== APK FILES ==="
           find temp -name "*.apk"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: Absensi-RPL-Muhtiga-APK
-          path: temp/**/**/*.apk
+          path: temp/**/*.apk
