@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          persist-credentials: true
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -33,13 +35,17 @@ jobs:
           cd temp
           cordova build android
 
-      - name: Find APK
+      - name: Copy APK to repo
         run: |
-          echo "=== APK FILES ==="
-          find temp -name "*.apk"
+          mkdir -p apk
+          APK_PATH=$(find temp -name "*.apk" | head -n 1)
+          cp "$APK_PATH" apk/Absensi-RPL-Muhtiga.apk
+          ls -lah apk
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: Absensi-RPL-Muhtiga-APK
-          path: temp/**/*.apk
+      - name: Commit APK to repository
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add apk/Absensi-RPL-Muhtiga.apk
+          git commit -m "Update APK Absensi RPL Muhtiga" || echo "No changes to commit"
+          git push
