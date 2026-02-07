@@ -30,10 +30,11 @@ jobs:
           cd temp
           cordova platform add android
 
-      - name: Build APK
+       - name: Build APK
         run: |
           cd temp
-          cordova build android
+          cordova build android --debug --packageType=apk
+
 
       - name: Copy APK to repo
         run: |
